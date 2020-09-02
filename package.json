@@ -1,0 +1,18 @@
+{
+  "name": "shield",
+  "version": "1.0.0",
+  "description": "Shield Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pulkit",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.17.0",
+    "apollo-server-express": "^2.17.0",
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
