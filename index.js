@@ -3,6 +3,7 @@ const  http = require('http');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const helmet = require('helmet');
+const compression = require('compression')
 const {
   ApolloServer,
   AuthenticationError,
@@ -32,6 +33,7 @@ const app = express();
 
 app.use(cors());
 app.use(helmet());
+app.use(compression());
 
 const getMe = async req => {
   const token = req.headers['x-token'];
