@@ -1,20 +1,19 @@
 const cors = require('cors');
-const path = require('path');
-const  http = require('http');
+const http = require('http');
 const express = require('express');
 const helmet = require('helmet');
 const compression = require('compression')
 const {
   ApolloServer,
-  AuthenticationError
 } = require('apollo-server-express');
-
-const schema = require('./lib/schema');
-const resolvers = require( './lib/resolvers');
 const dbConnection = require('./lib/config/mysql').mysqlConnection();
 
-const app = express();
+const schema = require('./lib/schema');
+const resolvers = require('./lib/resolvers');
+const { checkToken } = require('./lib/middleware/authorization');
 
+
+const app = express();
 app.use(cors());
 app.use(helmet());
 app.use(compression());
@@ -24,6 +23,14 @@ const server = new ApolloServer({
   resolvers,
   introspection: true,
   playground: true,
+  debug: true, // false for production
+  formatError: error => {
+    const message = error.message ? error.message : '';
+    return {
+      message,
+      ...error,
+    }
+  },
   context: async ({ req, connection }) => {
     if (connection) {
       return {
@@ -31,10 +38,19 @@ const server = new ApolloServer({
       };
     }
     if (req) {
-      return {
-        dbConnection,
-        secret: process.env.SECRET,
-      };
+      return checkToken(req).then(tokenResult => {
+        return {
+          dbConnection,
+          tokenResult,
+          tokenVerify: true
+        };
+      }).catch(err => {
+        return {
+          dbConnection,
+          err,
+          tokenVerify: false
+        };
+      })
     }
   },
 });
@@ -48,5 +64,5 @@ server.installSubscriptionHandlers(httpServer);
 const port = process.env.PORT || 8000;
 
 httpServer.listen({ port }, () => {
-    console.log(`Apollo Server on http://localhost:${port}/graphql`);
-  });
+  console.log(`Apollo Server on http://localhost:${port}/graphql`);
+});
