@@ -1,10 +1,11 @@
 {
-  "name": "shield",
+  "name": "graphql-applo-server-mysql-db",
   "version": "1.0.0",
-  "description": "Shield Project",
+  "description": "Graphql Demo Project with MYSQL DB",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "author": "Pulkit",
   "license": "ISC",
@@ -20,5 +21,7 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
 }
