@@ -33,6 +33,7 @@ const server = new ApolloServer({
   },
   context: async ({ req, connection }) => {
     if (connection) {
+      // handling subscription
       return {
         dbConnection,
       };
